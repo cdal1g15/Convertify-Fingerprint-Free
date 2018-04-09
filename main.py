@@ -15,13 +15,6 @@ from build_deezer_playlist import BuildDeezerPlaylist
 def main():
     songs_not_found = set()
     if len(sys.argv) > 1:
-        try:
-            with open('config.json') as f:
-                config = json.load(f)
-            djv = Dejavu(config)
-        except IOError:
-            print "Error: File not Found"
-            sys.exit()
         if len(sys.argv) > 4:
             spotify_username = sys.argv[1]
             playlist_url = sys.argv[2]
@@ -68,14 +61,12 @@ def non_fingerprinting_method(deezer_titles_and_previews, songs_not_found, playl
     build_deezer_playlist = BuildDeezerPlaylist()
     for song in deezer_titles_and_previews:
         track = song[0] + ' || ' + song[1]
-        print track
         song_id = build_deezer_playlist.get_song_id(track, deezer_titles_and_previews)
         if song_id is not None:
             build_deezer_playlist.add_to_playlist(playlist_title, None, song_id, deezer_token)
             print track, 'Successfully added to Deezer'
         else:
             songs_not_found.add(track)
-    print len(songs_not_found)
 
 
 if __name__ == "__main__":

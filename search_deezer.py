@@ -33,9 +33,6 @@ class SearchDeezer:
             results = json.loads(response.read())
             if results['total'] is not 0:
                 url = self.loop_over_results(track, artist, results)
-                if url is None:
-                    track = ' || '.join(title) + '.mp3'
-                    not_found.add(track)
                 title_and_previews[title] = url
             else:
                 print "Not Found:", track, "by", artist
