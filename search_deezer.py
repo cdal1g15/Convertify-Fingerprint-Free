@@ -21,6 +21,8 @@ class SearchDeezer:
             return None
 
     def search_for_track(self, title, title_and_previews, not_found):
+        if not all(title):
+            return None
         track = title[0]
         artist = title[1]
         if isinstance(track, basestring) and isinstance(artist, basestring):
@@ -61,16 +63,17 @@ class TestSearchDeezer(unittest.TestCase):
 
     def test_search_for_track(self):
         data_set = dict()
+        not_found = set()
         search_deezer = getattr(SearchDeezer, 'search_for_track')
-        track = search_deezer(SearchDeezer(), '', data_set)
+        track = search_deezer(SearchDeezer(), ('',), data_set, not_found)
         self.assertIsNone(track)
-        track_two = search_deezer(SearchDeezer(), 'Fast Car ||', data_set)
+        track_two = search_deezer(SearchDeezer(), ('Fast Car', '||'), data_set, not_found)
         self.assertIsNone(track_two)
-        track_three = search_deezer(SearchDeezer(), '|| Tracy Chapman', data_set)
+        track_three = search_deezer(SearchDeezer(), ('|| Tracy Chapman', ''), data_set, not_found)
         self.assertIsNone(track_three)
-        track_four = search_deezer(SearchDeezer(), '||', data_set)
+        track_four = search_deezer(SearchDeezer(), ('Fast Car', '||'), data_set, not_found)
         self.assertIsNone(track_four)
-        track_five = search_deezer(SearchDeezer(), '%\||/%', data_set)
+        track_five = search_deezer(SearchDeezer(), ('%\\', '/%'), data_set, not_found)
         self.assertIsNone(track_five)
-        track_six = search_deezer(SearchDeezer(), '||Tracy Chapman||Fast Car', data_set)
+        track_six = search_deezer(SearchDeezer(), ('||Tracy Chapman||', 'Fast Car'), data_set, not_found)
         self.assertIsNone(track_six)

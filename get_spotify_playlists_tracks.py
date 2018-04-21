@@ -96,9 +96,12 @@ class TestGetPlaylistTracks(unittest.TestCase):
                             token)['name'], 'Test Playlist', 'Test Playlist name not returned correctly')
 
     def test_get_all_playlists(self):
+        # Need to check number of playlists before running
+        number_of_playlists = 9
         authenticate = getattr(Authenticate, 'token_authentication')
         token = authenticate(Authenticate(), 'swttyjm9q7591l77ngrnrxqyp')
         get_all_playlists = getattr(GetPlaylistTracks, 'get_all_playlists')
         self.assertEquals(len(get_all_playlists(
             GetPlaylistTracks(),
-            'https://open.spotify.com/user/swttyjm9q7591l77ngrnrxqyp/playlist/2SChSLF3kFcy5EDwejSjKO', token)), 1)
+            'https://open.spotify.com/user/swttyjm9q7591l77ngrnrxqyp/playlist/2SChSLF3kFcy5EDwejSjKO', token)),
+            number_of_playlists)

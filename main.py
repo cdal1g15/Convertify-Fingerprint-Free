@@ -1,31 +1,24 @@
 import sys
-import json
-
-
-from dejavu import Dejavu
 from datetime import datetime
 
 from authenticate import Authenticate
+from build_deezer_playlist import BuildDeezerPlaylist
 from deezer_autenticate import DeezerAuthenticate
 from get_spotify_playlists_tracks import GetPlaylistTracks
 from search_deezer import SearchDeezer
-from build_deezer_playlist import BuildDeezerPlaylist
 
 
 def main():
     songs_not_found = set()
+    # Check arguments are passed to Convertify
     if len(sys.argv) > 1:
-        if len(sys.argv) > 4:
+        if len(sys.argv) > 3:
             spotify_username = sys.argv[1]
             playlist_url = sys.argv[2]
             deezer_username = sys.argv[3]
-            if sys.argv[4] == 'Yes' or sys.argv[4] == 'yes':
-                fingerprint = True
-            else:
-                fingerprint = False
         else:
-            print 'Please provide your spotify username, a spotify playlist url, ' \
-                  'deezer username and if you want to confirm songs with fingerprinting'
+            print 'Please provide your spotify username, a spotify playlist url, and ' \
+                  'deezer username'
             sys.exit()
 
         # Initialise
@@ -57,6 +50,7 @@ def main():
         print 'Please provide your spotify username, a spotify playlist url and deezer username'
 
 
+# Add songs matched to given Deezer playlist
 def non_fingerprinting_method(deezer_titles_and_previews, songs_not_found, playlist_title, deezer_token):
     build_deezer_playlist = BuildDeezerPlaylist()
     for song in deezer_titles_and_previews:

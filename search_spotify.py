@@ -11,6 +11,8 @@ class SearchSpotify:
 
     def search_for_track(self, title, token):
         sp = spotipy.Spotify(auth=token)
+        if not all(title):
+            return None
         track = title[0]
         artist = title[1]
         if isinstance(track,  basestring) and isinstance(artist, basestring):
@@ -36,23 +38,20 @@ class TestSearchSpotify(unittest.TestCase):
         authenticate = getattr(Authenticate, 'token_authentication')
         token = authenticate(Authenticate(), 'swttyjm9q7591l77ngrnrxqyp')
         search_spotify = getattr(SearchSpotify, 'search_for_track')
-        track = search_spotify(SearchSpotify(), '', token)
+        track = search_spotify(SearchSpotify(), ('', ), token)
         self.assertIsNone(track)
-        track_two = search_spotify(SearchSpotify(), 'Fast Car ||', token)
+        track_two = search_spotify(SearchSpotify(), ('Fast Car', ''), token)
         self.assertIsNone(track_two)
-        track_three = search_spotify(SearchSpotify(), '|| Tracy Chapman', token)
+        track_three = search_spotify(SearchSpotify(), ('', 'Tracy Chapman'), token)
         self.assertIsNone(track_three)
-        track_four = search_spotify(SearchSpotify(), '||', token)
+        track_four = search_spotify(SearchSpotify(), ('', ''), token)
         self.assertIsNone(track_four)
-        track_five = search_spotify(SearchSpotify(), '%\||/%', token)
+        track_five = search_spotify(SearchSpotify(), ('%\\', '/%'), token)
         self.assertIsNone(track_five)
-        track_six = search_spotify(SearchSpotify(), '||Tracy Chapman||Fast Car', token)
-        self.assertIsNone(track_six)
 
     def test_correct_track_found(self):
         authenticate = getattr(Authenticate, 'token_authentication')
         token = authenticate(Authenticate(), 'swttyjm9q7591l77ngrnrxqyp')
         search_spotify = getattr(SearchSpotify, 'search_for_track')
-        track = search_spotify(SearchSpotify(), 'Fast Car || Tracy Chapman', token)
+        track = search_spotify(SearchSpotify(), ('Fast Car', 'Tracy Chapman'), token)
         self.assertIsNotNone(track)
-
